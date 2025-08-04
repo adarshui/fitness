@@ -1,0 +1,41 @@
+/* Forms.module.css */
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  max-width: 400px;
+  margin: 40px auto; /* Center the form and add margin */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+.formContainer h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.inputField {
+  margin-bottom: 15px !important; /* Add margin between input fields */
+  width: 100%; /* Make input fields take full width of container */
+}
+
+.submitButton {
+  margin-top: 10px !important; /* Add margin above the button */
+  width: 100%; /* Make button take full width of container */
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .formContainer {
+    padding: 15px;
+    margin: 20px auto;
+  }
+}
