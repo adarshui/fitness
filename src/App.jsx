@@ -4,7 +4,7 @@ import Login from '/src/pages/Login';
 import Home from '/src/pages/Home';
 import './App.css'
 import { useEffect, useState } from 'react';
-import { isAuthenticated } from '/src/firebase';
+import { isAuthenticated } from './auth';
 
 function App() {
   const [user, setUser] = useState(null);
