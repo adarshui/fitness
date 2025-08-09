@@ -4,24 +4,23 @@ import Login from '/src/pages/Login';
 import Home from '/src/pages/Home';
 import './App.css'
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '/src/firebase';
+import { isAuthenticated } from '/src/firebase';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
+  const checkAuth = () => {
+    setUser(isAuthenticated());
+  };
 
-    return () => unsubscribe();
+  useEffect(() => {
+    checkAuth();
+    setLoading(false);
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
+    return <div>Loading...</div>;
   }
 
   return (
@@ -29,11 +28,9 @@ function App() {
       <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onLogin={checkAuth} />} />
       </Routes>
-      {!user && (<div>
-        <Link to="/register">Register</Link> | <Link to="/login">Login</Link>
-      </div>)}
+     
     </BrowserRouter>
   )
 }
