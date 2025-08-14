@@ -62,6 +62,13 @@ class ApiService {
     return this.request('/api/profile/');
   }
 
+  async trackWorkout(exerciseTime) {
+    return this.request('/api/track-workout/', {
+      method: 'POST',
+      body: JSON.stringify({ exercise_time: exerciseTime }),
+    });
+  }
+
   logout() {
     this.removeToken();
   }

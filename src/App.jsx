@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Register from '/src/pages/Register';
 import Login from '/src/pages/Login';
 import Home from '/src/pages/Home';
+import Videos from '/src/pages/Videos';
 import './App.css'
 import { useEffect, useState } from 'react';
 import { isAuthenticated } from './auth';
@@ -27,6 +28,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/videos" element={user ? <Videos /> : <Navigate to="/login" />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login onLogin={checkAuth} />} />
       </Routes>

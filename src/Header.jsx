@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, User, Home, Activity } from 'lucide-react';
+import { LogOut, User, Home, Activity, Play } from 'lucide-react';
 import ApiService from './api';
 
 function Header() {
@@ -87,7 +87,7 @@ function Header() {
       </div>
       
       <nav style={styles.nav}>
-        <button 
+        {/* <button 
           style={styles.navButton}
           onClick={() => navigate('/')}
           onMouseEnter={(e) => {
@@ -101,9 +101,25 @@ function Header() {
         >
           <Home size={16} />
           Home
-        </button>
+        </button> */}
         
         <button 
+          style={styles.navButton}
+          onClick={() => navigate('/videos')}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.target.style.color = '#ffffff';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'none';
+            e.target.style.color = '#e0e7ff';
+          }}
+        >
+          <Play size={16} />
+          Home
+        </button>
+        
+        {/* <button 
           style={styles.navButton}
           onMouseEnter={(e) => {
             e.target.style.background = 'rgba(255, 255, 255, 0.1)';
@@ -116,7 +132,7 @@ function Header() {
         >
           <User size={16} />
           Profile
-        </button>
+        </button> */}
         
         <button 
           style={styles.logoutButton}
