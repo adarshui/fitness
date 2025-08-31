@@ -148,7 +148,6 @@ function Register() {
       cursor: 'default'
     },
     titleHover: {
-      background: 'linear-gradient(135deg, #e0e7ff, #fce7f3)',
       backgroundClip: 'text',
       WebkitBackgroundClip: 'text'
     },

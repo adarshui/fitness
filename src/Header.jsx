@@ -87,7 +87,7 @@ function Header() {
       </div>
       
       <nav style={styles.nav}>
-        {/* <button 
+        <button 
           style={styles.navButton}
           onClick={() => navigate('/')}
           onMouseEnter={(e) => {
@@ -101,7 +101,7 @@ function Header() {
         >
           <Home size={16} />
           Home
-        </button> */}
+        </button>
         
         <button 
           style={styles.navButton}
@@ -116,11 +116,12 @@ function Header() {
           }}
         >
           <Play size={16} />
-          Home
+          Videos
         </button>
         
-        {/* <button 
+        <button 
           style={styles.navButton}
+          onClick={() => navigate('/profile')}
           onMouseEnter={(e) => {
             e.target.style.background = 'rgba(255, 255, 255, 0.1)';
             e.target.style.color = '#ffffff';
@@ -132,7 +133,7 @@ function Header() {
         >
           <User size={16} />
           Profile
-        </button> */}
+        </button>
         
         <button 
           style={styles.logoutButton}

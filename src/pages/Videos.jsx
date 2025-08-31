@@ -13,6 +13,10 @@ function Videos() {
   const [exerciseTime, setExerciseTime] = useState(0);
   const videoRef = useRef(null);
   const timerRef = useRef(null);
+  const [videosPlan, setVideosPlan] = useState([]);
+  const [userLevel, setUserLevel] = useState(null);
+  const [loadingPlan, setLoadingPlan] = useState(false);
+  const [planError, setPlanError] = useState(null);
 
   const handleVideoSelect = (videoPath, category, subCategory, videos, index) => {
     console.log('Playing video:', videoPath);
@@ -69,6 +73,107 @@ function Videos() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Helpers to map the selected exercise to backend video identifiers
+  const getCurrentExerciseName = () => {
+    const name = categoryVideos[currentVideoIndex] || '';
+    return name.replace('.mp4', '');
+  };
+
+  const mapExerciseToBackendId = (name) => {
+    const n = (name || '').toLowerCase();
+    if (n.includes('warm')) return 'warmup';
+    if (n.includes('jack')) return 'jjacks';
+    if (n.includes('jump')) return 'jjacks';
+    if (n.includes('squat')) return 'squats';
+    if (n.includes('push')) return 'pushups';
+    if (n.includes('plank')) return 'plank';
+    return null;
+  };
+
+  const getSelectedPlan = () => {
+    const name = getCurrentExerciseName();
+    const id = mapExerciseToBackendId(name);
+    if (id) {
+      const byId = videosPlan.find(v => v.id === id);
+      if (byId) return byId;
+    }
+    const byTitle = videosPlan.find(v => (v.title || '').toLowerCase() === (name || '').toLowerCase());
+    if (byTitle) return byTitle;
+    // Fallback: compute plan locally if backend doesn't have it
+    return computeFallbackPlan(name);
+  };
+
+  const normalizeLevel = (lvl) => {
+    const s = String(lvl || '').toLowerCase();
+    if (s === '1' || s === 'beginner') return 'beginner';
+    if (s === '2' || s === 'intermediate') return 'intermediate';
+    if (s === '3' || s === 'advanced') return 'advanced';
+    return 'beginner';
+  };
+
+  const computeFallbackPlan = (rawName) => {
+    const name = (rawName || '').toLowerCase();
+    const lvl = normalizeLevel(userLevel);
+
+    // Helper to pick value by level
+    const pick = (obj) => obj[lvl] ?? obj['beginner'];
+
+    // Keyword-driven templates (estimates based on typical programming for time/rep schemes)
+    const templates = [
+      // Full-body / cardio intensive
+      { keys: ['burpee'], sets: { beginner: 3, intermediate: 4, advanced: 5 }, cal: { beginner: 50, intermediate: 70, advanced: 90 } },
+      { keys: ['mountain climb', 'mountain-climb', 'mountain'], sets: { beginner: 3, intermediate: 4, advanced: 5 }, cal: { beginner: 40, intermediate: 55, advanced: 70 } },
+      { keys: ['jumping jack', 'jumping-jack', 'jumping'], sets: { beginner: 3, intermediate: 4, advanced: 5 }, cal: { beginner: 30, intermediate: 40, advanced: 55 } },
+
+      // Chest / pushing
+      { keys: ['push-ups', 'push ups', 'push-up', 'pushup', 'push'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 25, intermediate: 35, advanced: 50 } },
+      { keys: ['bench press'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 40, intermediate: 55, advanced: 75 } },
+      { keys: ['chest dip', 'dips'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 30, intermediate: 40, advanced: 55 } },
+      { keys: ['cable crossover', 'chest fly', 'fly'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 20, intermediate: 30, advanced: 40 } },
+
+      // Back / pulling
+      { keys: ['pull-up', 'pull up', 'pull-ups'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 35, intermediate: 45, advanced: 60 } },
+      { keys: ['row', 'inverted row', 'inverted rows', 'lat pulldown'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 30, intermediate: 40, advanced: 55 } },
+      { keys: ['deadlift'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 45, intermediate: 60, advanced: 80 } },
+
+      // Shoulders
+      { keys: ['lateral raise', 'front raise', 'upright row', 'rear delt', 'overhead press', 'handstand push'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 20, intermediate: 28, advanced: 40 } },
+
+      // Biceps
+      { keys: ['bicep', 'curl', 'chin up', 'chin-up'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 15, intermediate: 25, advanced: 35 } },
+
+      // Triceps
+      { keys: ['tricep', 'skull crusher', 'kickback', 'pushdown', 'overhead extension'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 20, intermediate: 28, advanced: 40 } },
+
+      // Lower body
+      { keys: ['squat'], sets: { beginner: 2, intermediate: 3, advanced: 5 }, cal: { beginner: 35, intermediate: 45, advanced: 60 } },
+      { keys: ['lunge'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 30, intermediate: 40, advanced: 55 } },
+      { keys: ['glute bridge'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 20, intermediate: 28, advanced: 35 } },
+      { keys: ['kettlebell swing', 'kettlebell'], sets: { beginner: 3, intermediate: 4, advanced: 5 }, cal: { beginner: 40, intermediate: 55, advanced: 75 } },
+      { keys: ['calves', 'calf'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 12, intermediate: 18, advanced: 25 } },
+      { keys: ['hamstring', 'romanian deadlift'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 35, intermediate: 45, advanced: 60 } },
+
+      // Core
+      { keys: ['plank', 'side plank'], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 15, intermediate: 20, advanced: 28 } },
+      { keys: ['russian twist', 'toe touches', 'v-ups', 'sit-ups', 'reverse crunch', 'leg raise', 'hanging leg', 'bicycle crunch', 'flutter kick', 'mountain climber'], sets: { beginner: 3, intermediate: 4, advanced: 5 }, cal: { beginner: 20, intermediate: 28, advanced: 35 } },
+
+      // Generic fallback
+      { keys: [''], sets: { beginner: 2, intermediate: 3, advanced: 4 }, cal: { beginner: 20, intermediate: 30, advanced: 40 } }
+    ];
+
+    const template = templates.find(t => t.keys.some(k => name.includes(k)));
+    const sets = pick(template.sets);
+    const calories_per_set = pick(template.cal);
+    return {
+      id: null,
+      title: rawName,
+      level: lvl,
+      sets,
+      calories_per_set,
+      total_calories: sets * calories_per_set
+    };
+  };
+
   // Video event handlers - independent from timer
   const handleVideoPlay = () => {
     videoRef.current?.play();
@@ -106,7 +211,44 @@ function Videos() {
     };
   }, []);
 
-  // No initial loading needed
+  // Load level-based videos plan from backend
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      setLoadingPlan(true);
+      setPlanError(null);
+      try {
+        const res = await ApiService.request('/api/videos/'); // expects { videos: [...] }
+        if (isMounted && res && Array.isArray(res.videos)) {
+          setVideosPlan(res.videos);
+          setUserLevel(res.videos[0]?.level || null);
+        }
+      } catch (e) {
+        if (isMounted) setPlanError('Failed to load workout plan');
+      } finally {
+        if (isMounted) setLoadingPlan(false);
+      }
+    })();
+    return () => { isMounted = false; };
+  }, []);
+
+  // Also fetch user profile to get level if not provided by videos endpoint
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        if (!userLevel) {
+          const profile = await ApiService.getUserProfile();
+          if (isMounted && profile && profile.level) {
+            setUserLevel(profile.level);
+          }
+        }
+      } catch (_) {
+        // ignore, fallback will use beginner
+      }
+    })();
+    return () => { isMounted = false; };
+  }, [userLevel]);
 
   // Removed video tracking and navigation functions
 
@@ -340,6 +482,36 @@ function Videos() {
                       Next Exercise →
                     </button>
                   </div>
+                </div>
+                {/* Level-based plan info */}
+                <div style={styles.statsContainer}>
+                  {loadingPlan ? (
+                    <div style={{ color: '#ffffff' }}>Loading plan...</div>
+                  ) : planError ? (
+                    <div style={{ color: '#ffdddd' }}>{planError}</div>
+                  ) : (() => {
+                    const plan = getSelectedPlan();
+                    return (
+                      <>
+                        <div style={styles.statItem}>
+                          <div style={styles.statNumber}>{plan.sets}</div>
+                          <div style={styles.statLabel}>Sets</div>
+                        </div>
+                        <div style={styles.statItem}>
+                          <div style={styles.statNumber}>{plan.calories_per_set}</div>
+                          <div style={styles.statLabel}>Calories / Set</div>
+                        </div>
+                        <div style={styles.statItem}>
+                          <div style={styles.statNumber}>{plan.total_calories}</div>
+                          <div style={styles.statLabel}>Total Calories</div>
+                        </div>
+                        <div style={styles.statItem}>
+                          <div style={styles.statNumber}>{userLevel || plan.level}</div>
+                          <div style={styles.statLabel}>Your Level</div>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
                 <div style={styles.timerContainer}>
                   <div style={styles.timer}>

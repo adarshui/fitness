@@ -13,15 +13,20 @@ class ApiService {
     localStorage.removeItem('access_token');
   }
 
+  // Simple auth check based on presence of an access token
+  isAuthenticated() {
+    return !!this.getToken();
+  }
+
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
     const token = this.getToken();
-    
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
+        ...(options.headers || {}),
       },
       ...options,
     };
@@ -58,14 +63,23 @@ class ApiService {
     return this.request('/api/dashboard/');
   }
 
+  // Correct endpoint for fetching user profile
   async getUserProfile() {
-    return this.request('/api/profile/');
+    return this.request('/api/get_user_profile/');
   }
 
   async trackWorkout(exerciseTime) {
     return this.request('/api/track-workout/', {
       method: 'POST',
       body: JSON.stringify({ exercise_time: exerciseTime }),
+    });
+  }
+
+  // Save user profile
+  async saveUserProfile(profileData) {
+    return this.request('/api/save_user_profile/', {
+      method: 'POST',
+      body: JSON.stringify(profileData),
     });
   }
 
