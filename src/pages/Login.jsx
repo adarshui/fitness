@@ -19,7 +19,7 @@ function Login({ onLogin }) {
     try {
       await ApiService.login(username, password);
       onLogin();
-      navigate('/videos');
+      navigate('/');
     } catch (error) {
       setError('Invalid username or password');
     } finally {
