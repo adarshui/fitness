@@ -17,6 +17,7 @@ function Videos() {
   const [userLevel, setUserLevel] = useState(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
   const [planError, setPlanError] = useState(null);
+  const [completionMessage, setCompletionMessage] = useState(null);
 
   const handleVideoSelect = (videoPath, category, subCategory, videos, index) => {
     console.log('Playing video:', videoPath);
@@ -25,6 +26,7 @@ function Videos() {
     setCurrentSubCategory(subCategory);
     setCategoryVideos(videos);
     setCurrentVideoIndex(index);
+    setCompletionMessage(null); // Clear message on new video
   };
 
   const handleNextVideo = () => {
@@ -32,6 +34,7 @@ function Videos() {
       const nextIndex = (currentVideoIndex + 1) % categoryVideos.length;
       const nextVideo = categoryVideos[nextIndex];
       setSelectedVideo(`/src/fitness/${currentCategory}/${currentSubCategory}/${nextVideo}`);
+      setCompletionMessage(null);
       setCurrentVideoIndex(nextIndex);
     }
   };
@@ -41,6 +44,7 @@ function Videos() {
       const prevIndex = (currentVideoIndex - 1 + categoryVideos.length) % categoryVideos.length;
       const prevVideo = categoryVideos[prevIndex];
       setSelectedVideo(`/src/fitness/${currentCategory}/${currentSubCategory}/${prevVideo}`);
+      setCompletionMessage(null);
       setCurrentVideoIndex(prevIndex);
     }
   };
@@ -187,6 +191,38 @@ function Videos() {
     videoRef.current?.pause();
   };
 
+  const handleCompleteWorkout = async () => {
+    if (!selectedVideo) return;
+
+    const plan = getSelectedPlan();
+    if (!plan || !plan.total_calories) {
+      setCompletionMessage({
+        type: 'error',
+        text: 'Could not find calorie information for this workout.'
+      });
+      setTimeout(() => setCompletionMessage(null), 5000);
+      return;
+    }
+
+    try {
+      const response = await ApiService.request('/api/complete-workout/', {
+        method: 'POST',
+        body: JSON.stringify({
+          calories_burned: plan.total_calories,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setCompletionMessage({ type: 'success', text: response.message || 'Workout completed successfully!' });
+      setTimeout(() => setCompletionMessage(null), 5000);
+    } catch (error) {
+      console.error('Failed to complete workout:', error);
+      setCompletionMessage({ type: 'error', text: 'Failed to save workout. Please try again.' });
+      setTimeout(() => setCompletionMessage(null), 5000);
+    }
+  };
+
   // Keep timer running across component re-renders
   useEffect(() => {
     if (isTimerRunning && !timerRef.current) {
@@ -255,7 +291,7 @@ function Videos() {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: '#000000',
       paddingTop: '80px',
       display: 'flex',
       position: 'relative'
@@ -275,11 +311,11 @@ function Videos() {
       textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)'
     },
     videoContainer: {
-      background: 'rgba(255, 255, 255, 0.1)',
+      background: 'rgba(30, 30, 30, 0.75)',
       backdropFilter: 'blur(20px)',
       borderRadius: '20px',
       padding: '30px',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
       marginBottom: '30px'
     },
     video: {
@@ -295,7 +331,7 @@ function Videos() {
       marginTop: '20px'
     },
     button: {
-      background: 'linear-gradient(45deg, #8b5cf6, #ec4899)',
+      background: '#f44336',
       color: '#ffffff',
       border: 'none',
       padding: '12px 24px',
@@ -306,16 +342,16 @@ function Videos() {
       transition: 'all 0.3s ease'
     },
     videoInfo: {
-      color: '#e0e7ff',
+      color: '#cccccc',
       fontSize: '18px',
       fontWeight: '500'
     },
     statsContainer: {
-      background: 'rgba(255, 255, 255, 0.1)',
+      background: 'rgba(30, 30, 30, 0.75)',
       backdropFilter: 'blur(15px)',
       borderRadius: '16px',
       padding: '20px',
-      border: '1px solid rgba(255, 255, 255, 0.15)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
       marginBottom: '30px',
       display: 'flex',
       justifyContent: 'space-around',
@@ -331,7 +367,7 @@ function Videos() {
     },
     statLabel: {
       fontSize: '14px',
-      color: '#e0e7ff'
+      color: '#cccccc'
     },
     timerContainer: {
       display: 'flex',
@@ -368,7 +404,7 @@ function Videos() {
       gap: '10px'
     },
     navigationButton: {
-      background: 'linear-gradient(45deg, #8b5cf6, #ec4899)',
+      background: '#f44336',
       color: '#ffffff',
       border: 'none',
       padding: '10px 20px',
@@ -399,7 +435,7 @@ function Videos() {
       textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
     },
     exerciseTitle: {
-      color: '#e0e7ff',
+      color: '#cccccc',
       fontSize: '1.4rem',
       fontWeight: '500',
       marginBottom: '15px',
@@ -409,10 +445,10 @@ function Videos() {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      background: 'rgba(255, 255, 255, 0.15)',
+      background: 'rgba(0, 0, 0, 0.2)',
       padding: '10px 20px',
       borderRadius: '12px',
-      border: '1px solid rgba(255, 255, 255, 0.2)'
+      border: '1px solid rgba(255, 255, 255, 0.1)'
     },
     timerIcon: {
       fontSize: '24px'
@@ -424,7 +460,7 @@ function Videos() {
       fontFamily: 'monospace'
     },
     timerLabel: {
-      color: '#e0e7ff',
+      color: '#cccccc',
       fontSize: '14px',
       marginLeft: '10px'
     }
@@ -522,27 +558,48 @@ function Videos() {
                   <div style={styles.timerControls}>
                     {!isTimerRunning ? (
                       <button
-                        style={{...styles.timerButton, background: 'linear-gradient(45deg, #10B981, #059669)'}}
+                        style={{...styles.timerButton, background: '#f44336'}}
                         onClick={startTimer}
                       >
                         Start Timer
                       </button>
                     ) : (
                       <button
-                        style={{...styles.timerButton, background: 'linear-gradient(45deg, #EF4444, #DC2626)'}}
+                        style={{...styles.timerButton, background: '#d32f2f'}}
                         onClick={stopTimer}
                       >
                         Stop Timer
                       </button>
                     )}
                     <button
-                      style={{...styles.timerButton, background: 'linear-gradient(45deg, #6B7280, #4B5563)'}}
+                      style={{...styles.timerButton, background: '#616161'}}
                       onClick={resetTimer}
                     >
                       Reset
                     </button>
                   </div>
                 </div>
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                  <button
+                    style={{...styles.button, padding: '12px 28px', fontSize: '18px', background: '#4CAF50' }}
+                    onClick={handleCompleteWorkout}
+                  >
+                    ✓ Complete Workout
+                  </button>
+                </div>
+                {completionMessage && (
+                  <div style={{ 
+                    textAlign: 'center',
+                    marginTop: '15px', 
+                    padding: '10px', 
+                    borderRadius: '8px',
+                    color: '#ffffff',
+                    background: completionMessage.type === 'success' ? 'rgba(76, 175, 80, 0.5)' : 'rgba(244, 67, 54, 0.5)',
+                    border: `1px solid ${completionMessage.type === 'success' ? 'rgba(76, 175, 80, 1)' : 'rgba(244, 67, 54, 1)'}`
+                  }}>
+                    {completionMessage.text}
+                  </div>
+                )}
               </>
             ) : (
               <div style={{

@@ -70,19 +70,17 @@
 .welcomeTitle {
   font-size: 3.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff, #e0e7ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: #000000;
   margin-bottom: 20px;
-  text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.7);
   animation: fadeInUp 1s ease-out;
 }
 
 .subtitle {
-  color: #e0e7ff;
+  color: #000000;
   font-size: 1.2rem;
   margin-bottom: 40px;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 

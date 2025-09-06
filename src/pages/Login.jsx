@@ -33,7 +33,7 @@ function Login({ onLogin }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: '#000000',
       padding: '20px',
       position: 'relative',
       overflow: 'hidden'
@@ -52,7 +52,7 @@ function Login({ onLogin }) {
       left: '10%',
       width: '200px',
       height: '200px',
-      background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent)',
+      background: 'radial-gradient(circle, rgba(244, 67, 54, 0.2), transparent)',
       borderRadius: '50%',
       filter: 'blur(60px)',
       animation: 'float 6s ease-in-out infinite'
@@ -63,7 +63,7 @@ function Login({ onLogin }) {
       right: '15%',
       width: '150px',
       height: '150px',
-      background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3), transparent)',
+      background: 'radial-gradient(circle, rgba(244, 67, 54, 0.2), transparent)',
       borderRadius: '50%',
       filter: 'blur(50px)',
       animation: 'float 8s ease-in-out infinite reverse'
@@ -74,7 +74,7 @@ function Login({ onLogin }) {
       left: '20%',
       width: '100px',
       height: '100px',
-      background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent)',
+      background: 'radial-gradient(circle, rgba(244, 67, 54, 0.15), transparent)',
       borderRadius: '50%',
       filter: 'blur(40px)',
       animation: 'float 10s ease-in-out infinite'
@@ -85,27 +85,27 @@ function Login({ onLogin }) {
       maxWidth: '400px'
     },
     formContainer: {
-      background: 'rgba(255, 255, 255, 0.1)',
+      background: 'rgba(30, 30, 30, 0.75)',
       backdropFilter: 'blur(20px)',
       borderRadius: '24px',
       padding: '32px',
       boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
       transition: 'all 0.5s ease',
       position: 'relative',
       overflow: 'hidden'
     },
     formContainerHover: {
-      background: 'rgba(255, 255, 255, 0.15)',
+      background: 'rgba(45, 45, 45, 0.85)',
       boxShadow: '0 35px 60px rgba(0, 0, 0, 0.3)',
-      border: '1px solid rgba(255, 255, 255, 0.3)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
       transform: 'scale(1.05)'
     },
     glowEffect: {
       position: 'absolute',
       inset: 0,
       borderRadius: '24px',
-      background: 'linear-gradient(45deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2))',
+      background: 'linear-gradient(45deg, rgba(244, 67, 54, 0.2), rgba(200, 50, 50, 0.2))',
       filter: 'blur(20px)',
       zIndex: -1,
       transition: 'opacity 0.5s ease'
@@ -117,7 +117,7 @@ function Login({ onLogin }) {
     logoContainer: {
       width: '64px',
       height: '64px',
-      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+      background: '#f44336',
       borderRadius: '16px',
       display: 'flex',
       alignItems: 'center',
@@ -134,7 +134,7 @@ function Login({ onLogin }) {
     title: {
       fontSize: '32px',
       fontWeight: 'bold',
-      background: 'linear-gradient(135deg, #ffffff, #e0e7ff)',
+      background: 'linear-gradient(135deg, #ffffff, #dddddd)',
       backgroundClip: 'text',
       WebkitBackgroundClip: 'text',
       color: 'transparent',
@@ -147,7 +147,7 @@ function Login({ onLogin }) {
       WebkitBackgroundClip: 'text'
     },
     subtitle: {
-      color: '#e0e7ff',
+      color: '#cccccc',
       marginTop: '8px',
       margin: 0,
       transition: 'color 0.3s ease',
@@ -168,7 +168,7 @@ function Login({ onLogin }) {
       display: 'block',
       fontSize: '14px',
       fontWeight: '500',
-      color: '#e0e7ff',
+      color: '#cccccc',
       marginBottom: '8px',
       transition: 'color 0.3s ease'
     },
@@ -183,7 +183,7 @@ function Login({ onLogin }) {
       left: '12px',
       top: '50%',
       transform: 'translateY(-50%)',
-      color: '#e0e7ff',
+      color: '#cccccc',
       transition: 'all 0.3s ease',
       zIndex: 2
     },
@@ -194,9 +194,9 @@ function Login({ onLogin }) {
     input: {
       width: '100%',
       padding: '12px 12px 12px 48px',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '12px',
-      background: 'rgba(255, 255, 255, 0.1)',
+      background: 'rgba(0, 0, 0, 0.2)',
       color: '#ffffff',
       fontSize: '16px',
       transition: 'all 0.3s ease',
@@ -204,8 +204,8 @@ function Login({ onLogin }) {
       boxSizing: 'border-box'
     },
     inputHover: {
-      background: 'rgba(255, 255, 255, 0.2)',
-      border: '1px solid rgba(255, 255, 255, 0.5)',
+      background: 'rgba(0, 0, 0, 0.3)',
+      border: '1px solid rgba(255, 255, 255, 0.3)',
       transform: 'scale(1.05)',
       boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
     },
@@ -213,7 +213,7 @@ function Login({ onLogin }) {
       position: 'absolute',
       inset: 0,
       borderRadius: '12px',
-      background: 'linear-gradient(45deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2))',
+      background: 'linear-gradient(45deg, rgba(244, 67, 54, 0.2), rgba(200, 50, 50, 0.2))',
       opacity: 0,
       transition: 'opacity 0.3s ease',
       pointerEvents: 'none'
@@ -228,7 +228,7 @@ function Login({ onLogin }) {
       transform: 'translateY(-50%)',
       background: 'none',
       border: 'none',
-      color: '#e0e7ff',
+      color: '#cccccc',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
       zIndex: 2
@@ -263,7 +263,7 @@ function Login({ onLogin }) {
     submitButton: {
       position: 'relative',
       width: '100%',
-      background: 'linear-gradient(45deg, #8b5cf6, #ec4899, #8b5cf6)',
+      background: '#f44336',
       color: '#ffffff',
       fontWeight: '600',
       padding: '16px 24px',
@@ -277,9 +277,9 @@ function Login({ onLogin }) {
       backgroundSize: '200% 100%'
     },
     submitButtonHover: {
-      background: 'linear-gradient(45deg, #7c3aed, #db2777, #7c3aed)',
+      background: '#d32f2f',
       transform: 'scale(1.05)',
-      boxShadow: '0 25px 50px rgba(139, 92, 246, 0.5)',
+      boxShadow: '0 25px 50px rgba(244, 67, 54, 0.4)',
       backgroundPosition: '100% 0'
     },
     submitButtonDisabled: {
@@ -525,9 +525,9 @@ function Login({ onLogin }) {
             borderTop: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
             <p style={{
-              color: '#e0e7ff',
+              color: '#cccccc',
               fontSize: '14px',
-              margin: 0
+              margin: 0,
             }}>
               Don't have an account?{' '}
               <button
@@ -536,7 +536,7 @@ function Login({ onLogin }) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#fce7f3',
+                  color: '#fca5a5',
                   fontWeight: '500',
                   cursor: 'pointer',
                   fontSize: '14px',
@@ -548,7 +548,7 @@ function Login({ onLogin }) {
                   e.target.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#fce7f3';
+                  e.target.style.color = '#fca5a5';
                   e.target.style.transform = 'scale(1)';
                 }}
               >

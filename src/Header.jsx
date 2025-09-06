@@ -17,9 +17,9 @@ function Header() {
       top: 0,
       left: 0,
       right: 0,
-      background: 'rgba(255, 255, 255, 0.1)',
+      background: 'rgba(10, 10, 10, 0.8)',
       backdropFilter: 'blur(20px)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
       padding: '15px 30px',
       zIndex: 1000,
       display: 'flex',
@@ -38,7 +38,7 @@ function Header() {
     logoIcon: {
       width: '40px',
       height: '40px',
-      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+      background: '#f44336',
       borderRadius: '10px',
       display: 'flex',
       alignItems: 'center',
@@ -52,7 +52,7 @@ function Header() {
     navButton: {
       background: 'none',
       border: 'none',
-      color: '#e0e7ff',
+      color: '#ffffff',
       cursor: 'pointer',
       padding: '8px 16px',
       borderRadius: '8px',
@@ -63,9 +63,9 @@ function Header() {
       fontSize: '14px'
     },
     logoutButton: {
-      background: 'rgba(239, 68, 68, 0.2)',
-      border: '1px solid rgba(239, 68, 68, 0.3)',
-      color: '#fca5a5',
+      background: 'rgba(244, 67, 54, 0.8)',
+      border: '1px solid rgba(244, 67, 54, 1)',
+      color: '#ffffff',
       cursor: 'pointer',
       padding: '8px 16px',
       borderRadius: '8px',
@@ -96,7 +96,7 @@ function Header() {
           }}
           onMouseLeave={(e) => {
             e.target.style.background = 'none';
-            e.target.style.color = '#e0e7ff';
+            e.target.style.color = '#ffffff';
           }}
         >
           <Home size={16} />
@@ -112,7 +112,7 @@ function Header() {
           }}
           onMouseLeave={(e) => {
             e.target.style.background = 'none';
-            e.target.style.color = '#e0e7ff';
+            e.target.style.color = '#ffffff';
           }}
         >
           <Play size={16} />
@@ -128,7 +128,7 @@ function Header() {
           }}
           onMouseLeave={(e) => {
             e.target.style.background = 'none';
-            e.target.style.color = '#e0e7ff';
+            e.target.style.color = '#ffffff';
           }}
         >
           <User size={16} />
@@ -139,12 +139,12 @@ function Header() {
           style={styles.logoutButton}
           onClick={handleLogout}
           onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(239, 68, 68, 0.3)';
+            e.target.style.background = 'rgba(244, 67, 54, 1)';
             e.target.style.color = '#ffffff';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(239, 68, 68, 0.2)';
-            e.target.style.color = '#fca5a5';
+            e.target.style.background = 'rgba(244, 67, 54, 0.8)';
+            e.target.style.color = '#ffffff';
           }}
         >
           <LogOut size={16} />

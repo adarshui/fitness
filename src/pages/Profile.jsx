@@ -121,7 +121,7 @@ const Profile = () => {
     const styles = {
         page: {
             minHeight: '100vh',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: '#000000',
             paddingTop: '80px', // make room for fixed header
             display: 'flex',
             alignItems: 'flex-start',
@@ -131,8 +131,8 @@ const Profile = () => {
         card: {
             width: '100%',
             maxWidth: 720,
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.12)',
+            background: 'rgba(30, 30, 30, 0.75)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
             borderRadius: 12,
             padding: 24,
             color: '#ffffff',
@@ -140,13 +140,13 @@ const Profile = () => {
         },
         row: { display: 'flex', gap: 16, marginBottom: 16 },
         col: { flex: 1 },
-        label: { display: 'block', marginBottom: 6, color: '#e0e7ff', fontSize: 14 },
-        input: { width: '100%', padding: 10, borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.25)', color: '#fff' },
-        select: { width: '100%', padding: 10, borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.25)', color: '#fff' },
+        label: { display: 'block', marginBottom: 6, color: '#cccccc', fontSize: 14 },
+        input: { width: '100%', padding: 10, borderRadius: 8, border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0,0,0,0.25)', color: '#fff' },
+        select: { width: '100%', padding: 10, borderRadius: 8, border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0,0,0,0.25)', color: '#fff' },
         header: { marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
         title: { fontSize: 20, fontWeight: 700, color: '#fff' },
         saveBtn: { 
-            background: saving ? '#666' : 'linear-gradient(45deg,#8b5cf6,#ec4899)', 
+            background: saving ? '#666' : '#f44336', 
             color: '#fff', 
             padding: '10px 16px', 
             borderRadius: 8, 

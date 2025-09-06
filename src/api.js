@@ -23,12 +23,12 @@ class ApiService {
     const token = this.getToken();
 
     const config = {
+      ...options,
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
         ...(options.headers || {}),
       },
-      ...options,
     };
 
     try {
